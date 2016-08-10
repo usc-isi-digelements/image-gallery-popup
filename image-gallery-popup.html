@@ -1,0 +1,260 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/image-icons.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+
+<!--
+A polymer web component that shows an image gallery popup.
+
+Example:
+
+        <image-gallery-popup
+          images="[[imageArray]]">
+        </image-gallery-popup>
+
+@demo demo/index.html
+-->
+
+<dom-module id="image-gallery-popup">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .gallery {
+        --paper-dialog-background-color: transparent;
+        box-shadow: none;
+        display: inline-block;
+        margin: 0;
+        overflow: auto;
+        height: 100%;
+        width: 100%;
+      }
+
+      .layout-override {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .exit-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      .prev-button {
+        position: absolute;
+        top: 50px;
+        bottom: 50px;
+        left: 0;
+      }
+
+      .next-button {
+        position: absolute;
+        top: 50px;
+        bottom: 50px;
+        right: 0;
+      }
+
+      paper-button {
+        margin: 0;
+        padding: 0;
+      }
+
+      paper-button[disabled] {
+        background-color: transparent;
+      }
+
+      paper-button[disabled] > iron-icon {
+        display: none;
+      }
+
+      iron-icon {
+        --iron-icon-height: 50px;
+        --iron-icon-width: 50px;
+        --iron-icon-fill-color: #ffffff;
+      }
+
+      iron-image {
+        --iron-image-height: auto;
+        --iron-image-width: auto;
+        padding: 0;
+        margin: 0;
+      }
+
+      .bottom-link {
+        text-decoration: none;
+      }
+
+      .bottom-link paper-button {
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 0;
+        padding: 20px;
+        width: 100%;
+      }
+    </style>
+
+    <paper-dialog id="imageModal" modal entry-animation="fade-in-animation" exit-animation="fade-out-animation" class="gallery">
+      <div class="layout horizontal center layout-override">
+        <div class="layout vertical flex">
+          <iron-image src="[[getProperty(currentImage, imageSourceProperty, '')]]" class$="layout horizontal center-justified [[getBlurClass(blur)]]"></iron-image>
+
+          <template is="dom-if" if="[[linkText]]">
+            <a class="bottom-link" target="[[getTarget(newTab)]]" href$="[[getProperty(currentImage, imageLinkProperty, '#')]]">
+              <paper-button>[[linkText]]</paper-button>
+            </a>
+          </template>
+        </div>
+      </div>
+
+      <paper-button class="exit-button" on-click="closeDialog">
+        <iron-icon icon="clear"></iron-icon>
+      </paper-button>
+
+      <paper-button class="prev-button" disabled="{{!hasPrevious(currentIndex)}}" on-click="clickPrevious">
+        <iron-icon icon="image:navigate-before"></iron-icon>
+      </paper-button>
+
+      <paper-button class="next-button" disabled="{{!hasNext(currentIndex)}}" on-click="clickNext">
+        <iron-icon icon="image:navigate-next"></iron-icon>
+      </paper-button>
+    </paper-dialog>
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'image-gallery-popup',
+
+      properties: {
+        /**
+         * The property of the image objects for the link URL to open a page within the application.
+         */
+        imageLinkProperty: {
+          type: String,
+          value: 'link'
+        },
+
+        /**
+         * The property of the image objects for the source URL of the image.
+         */
+        imageSourceProperty: {
+          type: String,
+          value: 'source'
+        },
+
+        /**
+         * The array of image objects.
+         */
+        images: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+
+        /**
+         * The image currently displayed.
+         */
+        currentImage: {
+          type: Object,
+          computed: 'computeCurrentImage(images, currentIndex)'
+        },
+
+        /**
+         * The index in the array of images of the image currently displayed.
+         */
+        currentIndex: {
+          type: Number,
+          value: 0
+        },
+
+        /**
+         * The text to show in the link at the bottom of the image.
+         */
+        linkText: {
+          type: String,
+          value: ''
+        },
+
+        /**
+         * Whether to open a link in a new tab.
+         */
+        newTab: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * Whether to blur the images.
+         */
+        blur: {
+          type: Boolean,
+          value: true
+        }
+      },
+
+      attached: function() {
+        this.$.imageModal.open();
+      },
+
+      computeCurrentImage: function() {
+        return (this.currentIndex >= 0 && this.images && this.currentIndex < this.images.length) ? this.images[this.currentIndex] : undefined;
+      },
+
+      getBlurClass: function(blur) {
+        return (blur ? 'large-blur' : '');
+      },
+
+      getProperty: function(item, property, defaultValue) {
+        return item[property] || defaultValue;
+      },
+
+      getTarget: function(newTab) {
+        return (newTab ? '_blank' : '_self');
+      },
+
+      hasPrevious: function(index) {
+        if(index - 1  < 0) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+
+      hasNext: function(index) {
+        if(index + 1 >= this.images.length) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+
+      clickPrevious: function() {
+        this.currentIndex = this.currentIndex - 1;
+        this.$.imageModal.refit();
+      },
+
+      clickNext: function() {
+        this.currentIndex = this.currentIndex + 1;
+        this.$.imageModal.refit();
+      },
+
+      closeDialog: function() {
+        this.$.imageModal.close();
+        this.remove();
+      }
+    });
+  })();
+  </script>
+</dom-module>
