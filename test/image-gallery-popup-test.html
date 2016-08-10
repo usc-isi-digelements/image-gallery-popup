@@ -79,13 +79,13 @@
       });
 
       test('hasPrevious will return false for first index, true for next index', function() {
-        expect(component.hasPrevious(component.currentIndex)).to.be.false;
-        expect(component.hasPrevious(component.currentIndex + 1)).to.be.true;
+        expect(component.hasPrevious(component.currentIndex, component.images)).to.be.false;
+        expect(component.hasPrevious(component.currentIndex + 1, component.images)).to.be.true;
       });
 
       test('hasNext will return true for first index, false for last index', function() {
-        expect(component.hasNext(component.currentIndex)).to.be.true;
-        expect(component.hasNext(component.images.length - 1)).to.be.false;
+        expect(component.hasNext(component.currentIndex, component.images)).to.be.true;
+        expect(component.hasNext(component.images.length - 1, component.images)).to.be.false;
       });
 
       test('clickNext increments currentIndex and updates currentImage', function() {

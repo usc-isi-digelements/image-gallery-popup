@@ -1,5 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/image-icons.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
@@ -21,6 +21,8 @@ Example:
 
 <dom-module id="image-gallery-popup">
   <template>
+    <style include="iron-flex iron-flex-alignment"></style>
+
     <style>
       :host {
         display: block;
@@ -119,11 +121,11 @@ Example:
         <iron-icon icon="clear"></iron-icon>
       </paper-button>
 
-      <paper-button class="prev-button" disabled="{{!hasPrevious(currentIndex)}}" on-click="clickPrevious">
+      <paper-button class="prev-button" disabled="{{!hasPrevious(currentIndex, images)}}" on-click="clickPrevious">
         <iron-icon icon="image:navigate-before"></iron-icon>
       </paper-button>
 
-      <paper-button class="next-button" disabled="{{!hasNext(currentIndex)}}" on-click="clickNext">
+      <paper-button class="next-button" disabled="{{!hasNext(currentIndex, images)}}" on-click="clickNext">
         <iron-icon icon="image:navigate-next"></iron-icon>
       </paper-button>
     </paper-dialog>
@@ -224,20 +226,12 @@ Example:
         return (newTab ? '_blank' : '_self');
       },
 
-      hasPrevious: function(index) {
-        if(index - 1  < 0) {
-          return false;
-        } else {
-          return true;
-        }
+      hasPrevious: function(index, images) {
+        return index - 1  >= 0;
       },
 
-      hasNext: function(index) {
-        if(index + 1 >= this.images.length) {
-          return false;
-        } else {
-          return true;
-        }
+      hasNext: function(index, images) {
+        return index + 1 < images.length;
       },
 
       clickPrevious: function() {
