@@ -107,10 +107,10 @@ Example:
     <paper-dialog id="imageModal" modal entry-animation="fade-in-animation" exit-animation="fade-out-animation" class="gallery">
       <div class="layout horizontal center layout-override">
         <div class="layout vertical flex">
-          <iron-image src="[[getProperty(currentImage, imageSourceProperty, '')]]" class$="layout horizontal center-justified [[getBlurClass(blur)]]"></iron-image>
+          <iron-image src="[[getProperty(currentImage, imageSourceProperty, '')]]" class$="layout horizontal center-justified [[styleClass]]"></iron-image>
 
           <template is="dom-if" if="[[linkText]]">
-            <a class="bottom-link" target="[[getTarget(newTab)]]" href$="[[getProperty(currentImage, imageLinkProperty, '#')]]">
+            <a class="bottom-link" target="[[linkTarget]]" href$="[[getProperty(currentImage, imageLinkProperty, '#')]]">
               <paper-button>[[linkText]]</paper-button>
             </a>
           </template>
@@ -166,19 +166,19 @@ Example:
         },
 
         /**
-         * The image currently displayed.
-         */
-        currentImage: {
-          type: Object,
-          computed: 'computeCurrentImage(images, currentIndex)'
-        },
-
-        /**
          * The index in the array of images of the image currently displayed.
          */
         currentIndex: {
           type: Number,
           value: 0
+        },
+
+        /**
+         * The target page of the link at the bottom of the image.
+         */
+        linkTarget: {
+          type: String,
+          value: '_self'
         },
 
         /**
@@ -190,19 +190,19 @@ Example:
         },
 
         /**
-         * Whether to open a link in a new tab.
+         * The style class of the image.
          */
-        newTab: {
-          type: Boolean,
-          value: false
+        styleClass: {
+          type: String,
+          value: ''
         },
 
         /**
-         * Whether to blur the images.
+         * The image currently displayed.
          */
-        blur: {
-          type: Boolean,
-          value: true
+        currentImage: {
+          type: Object,
+          computed: 'computeCurrentImage(images, currentIndex)'
         }
       },
 
@@ -214,16 +214,8 @@ Example:
         return (this.currentIndex >= 0 && this.images && this.currentIndex < this.images.length) ? this.images[this.currentIndex] : undefined;
       },
 
-      getBlurClass: function(blur) {
-        return (blur ? 'large-blur' : '');
-      },
-
       getProperty: function(item, property, defaultValue) {
         return item[property] || defaultValue;
-      },
-
-      getTarget: function(newTab) {
-        return (newTab ? '_blank' : '_self');
       },
 
       hasPrevious: function(index, images) {
