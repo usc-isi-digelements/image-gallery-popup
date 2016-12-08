@@ -8,13 +8,11 @@
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 
 <!--
-A polymer web component that shows an image gallery popup.
+A Polymer Element showing a full-screen image gallery popup.
 
-Example:
+### Example
 
-        <image-gallery-popup
-          images="[[imageArray]]">
-        </image-gallery-popup>
+    <image-gallery-popup images="[[imageArray]]"></image-gallery-popup>
 
 @demo demo/index.html
 -->
@@ -107,10 +105,10 @@ Example:
     <paper-dialog id="imageModal" modal entry-animation="fade-in-animation" exit-animation="fade-out-animation" class="gallery">
       <div class="layout horizontal center layout-override">
         <div class="layout vertical flex">
-          <iron-image src="[[getProperty(currentImage, imageSourceProperty, '')]]" class$="layout horizontal center-justified [[styleClass]]"></iron-image>
+          <iron-image src="[[_getProperty(currentImage, imageSourceProperty, '')]]" class$="layout horizontal center-justified [[styleClass]]"></iron-image>
 
           <template is="dom-if" if="[[linkText]]">
-            <a class="bottom-link" target="[[linkTarget]]" href$="[[getProperty(currentImage, imageLinkProperty, '#')]]">
+            <a class="bottom-link" target="[[linkTarget]]" href$="[[_getProperty(currentImage, imageLinkProperty, '#')]]">
               <paper-button>[[linkText]]</paper-button>
             </a>
           </template>
@@ -121,11 +119,11 @@ Example:
         <iron-icon icon="clear"></iron-icon>
       </paper-button>
 
-      <paper-button class="prev-button" disabled="{{!hasPrevious(currentIndex, images)}}" on-click="clickPrevious">
+      <paper-button class="prev-button" disabled="{{!_hasPrevious(currentIndex, images)}}" on-tap="goToPrevious">
         <iron-icon icon="image:navigate-before"></iron-icon>
       </paper-button>
 
-      <paper-button class="next-button" disabled="{{!hasNext(currentIndex, images)}}" on-click="clickNext">
+      <paper-button class="next-button" disabled="{{!_hasNext(currentIndex, images)}}" on-tap="goToNext">
         <iron-icon icon="image:navigate-next"></iron-icon>
       </paper-button>
     </paper-dialog>
@@ -141,6 +139,9 @@ Example:
       properties: {
         /**
          * The property of the image objects for the link URL to open a page within the application.
+         *
+         * @type {String}
+         * @default 'link'
          */
         imageLinkProperty: {
           type: String,
@@ -149,6 +150,9 @@ Example:
 
         /**
          * The property of the image objects for the source URL of the image.
+         *
+         * @type {String}
+         * @default 'source'
          */
         imageSourceProperty: {
           type: String,
@@ -157,6 +161,9 @@ Example:
 
         /**
          * The array of image objects.
+         *
+         * @type {Array}
+         * @default []
          */
         images: {
           type: Array,
@@ -167,6 +174,9 @@ Example:
 
         /**
          * The index in the array of images of the image currently displayed.
+         *
+         * @type {Number}
+         * @default 0
          */
         currentIndex: {
           type: Number,
@@ -175,6 +185,9 @@ Example:
 
         /**
          * The target page of the link at the bottom of the image.
+         *
+         * @type {String}
+         * @default '_self'
          */
         linkTarget: {
           type: String,
@@ -183,6 +196,9 @@ Example:
 
         /**
          * The text to show in the link at the bottom of the image.
+         *
+         * @type {String}
+         * @default ''
          */
         linkText: {
           type: String,
@@ -191,6 +207,9 @@ Example:
 
         /**
          * The style class of the image.
+         *
+         * @type {String}
+         * @default ''
          */
         styleClass: {
           type: String,
@@ -199,43 +218,90 @@ Example:
 
         /**
          * The image currently displayed.
+         *
+         * @type {Object}
          */
         currentImage: {
           type: Object,
-          computed: 'computeCurrentImage(images, currentIndex)'
+          computed: '_computeCurrentImage(images, currentIndex)'
         }
       },
 
+      /**
+       * Open this dialog when attached.
+       */
       attached: function() {
         this.$.imageModal.open();
       },
 
-      computeCurrentImage: function() {
-        return (this.currentIndex >= 0 && this.images && this.currentIndex < this.images.length) ? this.images[this.currentIndex] : undefined;
+      /**
+       * Returns the current image using the given list of images and the current index.
+       *
+       * @param {Array} images
+       * @param {Number} currentIndex
+       * @return {Object}
+       * @private
+       */
+      _computeCurrentImage: function(images, currentIndex) {
+        return (currentIndex >= 0 && images && currentIndex < images.length) ? images[currentIndex] : undefined;
       },
 
-      getProperty: function(item, property, defaultValue) {
+      /**
+       * Returns the given property in the given item or the given default value if the property is empty.
+       *
+       * @param {Object} item
+       * @param {String} property
+       * @param defaultValue
+       * @return
+       * @private
+       */
+      _getProperty: function(item, property, defaultValue) {
         return item[property] || defaultValue;
       },
 
-      hasPrevious: function(index, images) {
+      /**
+       * Returns whether the given list of images has an index before the given index.
+       *
+       * @param {Number} index
+       * @param {Array} images
+       * @return {Boolean}
+       * @private
+       */
+      _hasPrevious: function(index, images) {
         return index - 1  >= 0;
       },
 
-      hasNext: function(index, images) {
+      /**
+       * Returns whether the given list of images has an index after the given index.
+       *
+       * @param {Number} index
+       * @param {Array} images
+       * @return {Boolean}
+       * @private
+       */
+      _hasNext: function(index, images) {
         return index + 1 < images.length;
       },
 
-      clickPrevious: function() {
+      /**
+       * Changes the current index to the previous index.
+       */
+      goToPrevious: function() {
         this.currentIndex = this.currentIndex - 1;
         this.$.imageModal.refit();
       },
 
-      clickNext: function() {
+      /**
+       * Changes the current index to the next index.
+       */
+      goToNext: function() {
         this.currentIndex = this.currentIndex + 1;
         this.$.imageModal.refit();
       },
 
+      /**
+       * Closes this dialog.
+       */
       closeDialog: function() {
         this.$.imageModal.close();
         this.remove();

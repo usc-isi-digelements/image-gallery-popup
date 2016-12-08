@@ -1,12 +1,10 @@
 # image-gallery-popup
 
-A polymer web component that shows an image gallery popup.
+A Polymer Element showing a full-screen image gallery popup.
 
-Example:
+### Example
 ```html
-        <image-gallery-popup
-          images="[[imageArray]]">
-        </image-gallery-popup>
+    <image-gallery-popup images="[[imageArray]]"></image-gallery-popup>
 ```
 
 ### Dependencies

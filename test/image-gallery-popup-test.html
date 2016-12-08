@@ -16,11 +16,11 @@
 
   <script>
     suite('image-gallery-popup', function() {
-      var component;
+      var element;
 
       setup(function(done) {
-        component = fixture('image-gallery-popup-fixture');
-        component.images = [{
+        element = fixture('image-gallery-popup-fixture');
+        element.images = [{
           id: 'id1',
           link: 'link1',
           source: 'source1'
@@ -33,8 +33,8 @@
       });
 
       test('images set to correct value', function() {
-        expect(component.images).to.be.an('Array');
-        expect(component.images).to.deep.equal([{
+        expect(element.images).to.be.an('Array');
+        expect(element.images).to.deep.equal([{
           id: 'id1',
           link: 'link1',
           source: 'source1'
@@ -46,19 +46,19 @@
       });
 
       test('imageLinkProperty set to default value', function() {
-        expect(component.imageLinkProperty).to.equal('link');
+        expect(element.imageLinkProperty).to.equal('link');
       });
 
       test('imageSourceProperty set to default value', function() {
-        expect(component.imageSourceProperty).to.equal('source');
+        expect(element.imageSourceProperty).to.equal('source');
       });
 
       test('currentIndex set to default value', function() {
-        expect(component.currentIndex).to.equal(0);
+        expect(element.currentIndex).to.equal(0);
       });
 
       test('currentImage set to default value', function() {
-        expect(component.currentImage).to.deep.equal({
+        expect(element.currentImage).to.deep.equal({
           id: 'id1',
           link: 'link1',
           source: 'source1'
@@ -66,8 +66,8 @@
       });
 
       test('change currentIndex to change currentImage', function() {
-        component.currentIndex = 1;
-        expect(component.currentImage).to.deep.equal({
+        element.currentIndex = 1;
+        expect(element.currentImage).to.deep.equal({
           id: 'id2',
           link: 'link2',
           source: 'source2'
@@ -75,115 +75,115 @@
       });
 
       test('other properties set to default values', function() {
-        expect(component.styleClass).to.equal('');
-        expect(component.linkText).to.equal('');
-        expect(component.linkTarget).to.equal('_self');
+        expect(element.styleClass).to.equal('');
+        expect(element.linkText).to.equal('');
+        expect(element.linkTarget).to.equal('_self');
       });
 
       test('#imageModal is opened initially', function() {
-        expect(component.$$('#imageModal')).to.exist;
-        expect(component.$$('#imageModal').className.includes('gallery')).to.be.true;
-        expect(component.$$('#imageModal').modal).to.be.true;
-        expect(component.$$('#imageModal').opened).to.be.true;
+        expect(element.$$('#imageModal')).to.exist;
+        expect(element.$$('#imageModal').className.includes('gallery')).to.be.true;
+        expect(element.$$('#imageModal').modal).to.be.true;
+        expect(element.$$('#imageModal').opened).to.be.true;
       });
 
       test('currentImage appears in the DOM with no link below it', function() {
-        var expectedSrc = component.getProperty(component.currentImage, component.imageSourceProperty, '');
+        var expectedSrc = element._getProperty(element.currentImage, element.imageSourceProperty, '');
 
-        expect(component.$$('iron-image')).to.exist;
-        expect(component.$$('iron-image').src).to.deep.equal(expectedSrc);
-        expect(component.$$('a')).to.not.exist;
+        expect(element.$$('iron-image')).to.exist;
+        expect(element.$$('iron-image').src).to.deep.equal(expectedSrc);
+        expect(element.$$('a')).to.not.exist;
       });
 
       test('currentImage appears in the DOM with no link below it and has styleClass if specified', function(done) {
-        var expectedSrc = component.getProperty(component.currentImage, component.imageSourceProperty, '');
-        component.styleClass = 'some-class';
+        var expectedSrc = element._getProperty(element.currentImage, element.imageSourceProperty, '');
+        element.styleClass = 'some-class';
 
         flush(function() {
-          expect(component.styleClass).to.equal('some-class');
-          expect(component.$$('iron-image')).to.exist;
-          expect(component.$$('iron-image').className.includes(component.styleClass)).to.be.true;
-          expect(component.$$('iron-image').src).to.deep.equal(expectedSrc);
-          expect(component.$$('a')).to.not.exist;
+          expect(element.styleClass).to.equal('some-class');
+          expect(element.$$('iron-image')).to.exist;
+          expect(element.$$('iron-image').className.includes(element.styleClass)).to.be.true;
+          expect(element.$$('iron-image').src).to.deep.equal(expectedSrc);
+          expect(element.$$('a')).to.not.exist;
           done();
         });
       });
 
       test('necessary buttons and icons are present', function() {
-        expect(Polymer.dom(component.root).querySelectorAll('paper-button').length).to.equal(3);
-        expect(component.$$('paper-button.exit-button')).to.exist;
-        expect(component.$$('paper-button.exit-button').onClick).to.deep.equal(component.closeDialog());
-        expect(component.$$('paper-button.exit-button').children.length).to.equal(1);
-        expect(component.$$('paper-button.exit-button').children[0].localName).to.equal('iron-icon');
-        expect(component.$$('paper-button.exit-button').children[0].icon).to.equal('clear');
-        expect(component.$$('paper-button.prev-button')).to.exist;
-        expect(component.$$('paper-button.prev-button').disabled).to.equal(!component.hasPrevious(component.currentIndex, component.images));
-        expect(component.$$('paper-button.prev-button').onClick).to.deep.equal(component.clickPrevious());
-        expect(component.$$('paper-button.prev-button').children.length).to.equal(1);
-        expect(component.$$('paper-button.prev-button').children[0].localName).to.equal('iron-icon');
-        expect(component.$$('paper-button.prev-button').children[0].icon).to.equal('image:navigate-before');
-        expect(component.$$('paper-button.next-button')).to.exist;
-        expect(component.$$('paper-button.next-button').disabled).to.equal(!component.hasNext(component.currentIndex, component.images));
-        expect(component.$$('paper-button.next-button').onClick).to.deep.equal(component.clickPrevious());
-        expect(component.$$('paper-button.next-button').children.length).to.equal(1);
-        expect(component.$$('paper-button.next-button').children[0].localName).to.equal('iron-icon');
-        expect(component.$$('paper-button.next-button').children[0].icon).to.equal('image:navigate-next');
+        expect(Polymer.dom(element.root).querySelectorAll('paper-button').length).to.equal(3);
+        expect(element.$$('paper-button.exit-button')).to.exist;
+        expect(element.$$('paper-button.exit-button').onClick).to.deep.equal(element.closeDialog());
+        expect(element.$$('paper-button.exit-button').children.length).to.equal(1);
+        expect(element.$$('paper-button.exit-button').children[0].localName).to.equal('iron-icon');
+        expect(element.$$('paper-button.exit-button').children[0].icon).to.equal('clear');
+        expect(element.$$('paper-button.prev-button')).to.exist;
+        expect(element.$$('paper-button.prev-button').disabled).to.equal(!element._hasPrevious(element.currentIndex, element.images));
+        expect(element.$$('paper-button.prev-button').onClick).to.deep.equal(element.goToPrevious());
+        expect(element.$$('paper-button.prev-button').children.length).to.equal(1);
+        expect(element.$$('paper-button.prev-button').children[0].localName).to.equal('iron-icon');
+        expect(element.$$('paper-button.prev-button').children[0].icon).to.equal('image:navigate-before');
+        expect(element.$$('paper-button.next-button')).to.exist;
+        expect(element.$$('paper-button.next-button').disabled).to.equal(!element._hasNext(element.currentIndex, element.images));
+        expect(element.$$('paper-button.next-button').onClick).to.deep.equal(element.goToPrevious());
+        expect(element.$$('paper-button.next-button').children.length).to.equal(1);
+        expect(element.$$('paper-button.next-button').children[0].localName).to.equal('iron-icon');
+        expect(element.$$('paper-button.next-button').children[0].icon).to.equal('image:navigate-next');
       });
 
       test('if linkText is defined, link appears below iron-image', function(done) {
-        component.linkText = 'some text';
-        var expectedSrc = component.getProperty(component.currentImage, component.imageSourceProperty, '');
-        var expectedHref = component.getProperty(component.currentImage, component.imageLinkProperty, '#');
+        element.linkText = 'some text';
+        var expectedSrc = element._getProperty(element.currentImage, element.imageSourceProperty, '');
+        var expectedHref = element._getProperty(element.currentImage, element.imageLinkProperty, '#');
 
         flush(function() {
-          expect(component.$$('iron-image')).to.exist;
-          expect(component.$$('iron-image').src).to.deep.equal(expectedSrc);
-          expect(component.$$('a')).to.exist;
-          expect(component.$$('a').target).to.equal(component.linkTarget);
-          expect(component.$$('a').getAttribute('href')).to.equal(expectedHref);
-          expect(component.$$('a').children[0].localName).to.equal('paper-button');
-          expect(component.$$('a').children[0].textContent).to.equal(component.linkText);
+          expect(element.$$('iron-image')).to.exist;
+          expect(element.$$('iron-image').src).to.deep.equal(expectedSrc);
+          expect(element.$$('a')).to.exist;
+          expect(element.$$('a').target).to.equal(element.linkTarget);
+          expect(element.$$('a').getAttribute('href')).to.equal(expectedHref);
+          expect(element.$$('a').children[0].localName).to.equal('paper-button');
+          expect(element.$$('a').children[0].textContent).to.equal(element.linkText);
           done();
         });
       });
 
-      test('getProperty returns the correct id and source', function() {
-        expect(component.getProperty(component.images[0], component.imageLinkProperty)).to.be.equal('link1');
-        expect(component.getProperty(component.images[0], component.imageSourceProperty)).to.be.equal('source1');
+      test('_getProperty returns the correct id and source', function() {
+        expect(element._getProperty(element.images[0], element.imageLinkProperty)).to.be.equal('link1');
+        expect(element._getProperty(element.images[0], element.imageSourceProperty)).to.be.equal('source1');
       });
 
-      test('getProperty returns defaultValue argument if item[property] specified does not exist', function() {
-        expect(component.getProperty(component.images[0], 'invalidkey1', '')).to.be.equal('');
-        expect(component.getProperty(component.images[0], 'invalidkey2', '#')).to.be.equal('#');
+      test('_getProperty returns defaultValue argument if item[property] specified does not exist', function() {
+        expect(element._getProperty(element.images[0], 'invalidkey1', '')).to.be.equal('');
+        expect(element._getProperty(element.images[0], 'invalidkey2', '#')).to.be.equal('#');
       });
 
-      test('hasPrevious will return false for first index, true for next index', function() {
-        expect(component.hasPrevious(component.currentIndex, component.images)).to.be.false;
-        expect(component.hasPrevious(component.currentIndex + 1, component.images)).to.be.true;
+      test('_hasPrevious will return false for first index, true for next index', function() {
+        expect(element._hasPrevious(element.currentIndex, element.images)).to.be.false;
+        expect(element._hasPrevious(element.currentIndex + 1, element.images)).to.be.true;
       });
 
-      test('hasNext will return true for first index, false for last index', function() {
-        expect(component.hasNext(component.currentIndex, component.images)).to.be.true;
-        expect(component.hasNext(component.images.length - 1, component.images)).to.be.false;
+      test('_hasNext will return true for first index, false for last index', function() {
+        expect(element._hasNext(element.currentIndex, element.images)).to.be.true;
+        expect(element._hasNext(element.images.length - 1, element.images)).to.be.false;
       });
 
-      test('clickNext increments currentIndex and updates currentImage', function() {
-        component.clickNext();
-        expect(component.currentIndex).to.equal(1);
-        expect(component.currentImage).to.deep.equal({
+      test('goToNext increments currentIndex and updates currentImage', function() {
+        element.goToNext();
+        expect(element.currentIndex).to.equal(1);
+        expect(element.currentImage).to.deep.equal({
           id: 'id2',
           link: 'link2',
           source: 'source2'
         });
       });
 
-      test('clickPrevious decrements currentIndex and updates currentImage', function() {
-        component.currentIndex = 1;
-        component.currentImage = component.images[1];
+      test('goToPrevious decrements currentIndex and updates currentImage', function() {
+        element.currentIndex = 1;
+        element.currentImage = element.images[1];
 
-        component.clickPrevious();
-        expect(component.currentIndex).to.equal(0);
-        expect(component.currentImage).to.deep.equal({
+        element.goToPrevious();
+        expect(element.currentIndex).to.equal(0);
+        expect(element.currentImage).to.deep.equal({
           id: 'id1',
           link: 'link1',
           source: 'source1'
@@ -191,20 +191,20 @@
       });
 
       test('closeDialog removes element from the dom', function() {
-        component.closeDialog();
-        expect(component.$$('image-gallery-popup')).to.not.exist;
+        element.closeDialog();
+        expect(element.$$('image-gallery-popup')).to.not.exist;
       });
 
       test('does not show link if linkText is unset', function() {
-        expect(component.linkText).to.equal('');
-        expect(component.$$('a')).to.not.exist;
+        expect(element.linkText).to.equal('');
+        expect(element.$$('a')).to.not.exist;
       });
 
       test('does show link if linkText is set', function(done) {
-        component.linkText = 'Open';
+        element.linkText = 'Open';
         flush(function() {
-          expect(component.linkText).to.equal('Open');
-          expect(component.$$('a')).to.exist;
+          expect(element.linkText).to.equal('Open');
+          expect(element.$$('a')).to.exist;
           done();
         });
       });
