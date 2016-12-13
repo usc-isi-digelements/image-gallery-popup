@@ -11,8 +11,9 @@
 A Polymer Element showing a full-screen image gallery popup.
 
 ### Example
-
-    <image-gallery-popup images="[[imageArray]]"></image-gallery-popup>
+```html
+<image-gallery-popup images="[[imageArray]]"></image-gallery-popup>
+```
 
 @demo demo/index.html
 -->
@@ -138,6 +139,8 @@ A Polymer Element showing a full-screen image gallery popup.
 
       properties: {
         /**
+         * (Optional)
+         *
          * The property of the image objects for the link URL to open a page within the application.
          *
          * @type {String}
@@ -149,6 +152,8 @@ A Polymer Element showing a full-screen image gallery popup.
         },
 
         /**
+         * (Optional)
+         *
          * The property of the image objects for the source URL of the image.
          *
          * @type {String}
@@ -160,6 +165,8 @@ A Polymer Element showing a full-screen image gallery popup.
         },
 
         /**
+         * (Required)
+         *
          * The array of image objects.
          *
          * @type {Array}
@@ -173,6 +180,8 @@ A Polymer Element showing a full-screen image gallery popup.
         },
 
         /**
+         * (Output)
+         *
          * The index in the array of images of the image currently displayed.
          *
          * @type {Number}
@@ -184,6 +193,8 @@ A Polymer Element showing a full-screen image gallery popup.
         },
 
         /**
+         * (Optional)
+         *
          * The target page of the link at the bottom of the image.
          *
          * @type {String}
@@ -195,6 +206,8 @@ A Polymer Element showing a full-screen image gallery popup.
         },
 
         /**
+         * (Optional)
+         *
          * The text to show in the link at the bottom of the image.
          *
          * @type {String}
@@ -206,6 +219,8 @@ A Polymer Element showing a full-screen image gallery popup.
         },
 
         /**
+         * (Optional)
+         *
          * The style class of the image.
          *
          * @type {String}
@@ -217,6 +232,8 @@ A Polymer Element showing a full-screen image gallery popup.
         },
 
         /**
+         * (Output)
+         *
          * The image currently displayed.
          *
          * @type {Object}
