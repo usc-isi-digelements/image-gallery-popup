@@ -1,7 +1,7 @@
 {
   "name": "image-gallery-popup",
   "description": "A Polymer Element showing a full-screen image gallery popup.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [

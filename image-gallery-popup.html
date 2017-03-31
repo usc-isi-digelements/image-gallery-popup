@@ -124,8 +124,8 @@ A Polymer Element showing a full-screen image gallery popup.
         <div class="layout vertical flex">
           <iron-image src="[[_getProperty(currentImage, imageSourceProperty, '')]]" class$="layout horizontal center-justified [[styleClass]]"></iron-image>
 
-          <template is="dom-if" if="[[linkText]]">
-            <a class="bottom-link" target="[[linkTarget]]" href$="[[_getProperty(currentImage, imageLinkProperty, '#')]]">
+          <template is="dom-if" if="[[_getProperty(currentImage, imageLinkProperty)]]">
+            <a class="bottom-link" target="[[linkTarget]]" href$="[[_getProperty(currentImage, imageLinkProperty)]]">
               <paper-button>[[linkText]]</paper-button>
             </a>
           </template>
@@ -227,11 +227,11 @@ A Polymer Element showing a full-screen image gallery popup.
          * The text to show in the link at the bottom of the image.
          *
          * @type {String}
-         * @default ''
+         * @default 'Open'
          */
         linkText: {
           type: String,
-          value: ''
+          value: 'Open'
         },
 
         /**

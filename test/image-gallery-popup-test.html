@@ -92,7 +92,7 @@ limitations under the License.
 
       test('other properties set to default values', function() {
         expect(element.styleClass).to.equal('');
-        expect(element.linkText).to.equal('');
+        expect(element.linkText).to.equal('Open');
         expect(element.linkTarget).to.equal('_self');
       });
 
@@ -103,30 +103,32 @@ limitations under the License.
         expect(element.$$('#imageModal').opened).to.be.true;
       });
 
-      test('currentImage appears in the DOM with no link below it', function() {
+      test('currentImage appears in the DOM with link below it', function() {
         var expectedSrc = element._getProperty(element.currentImage, element.imageSourceProperty, '');
+        var expectedHref = element._getProperty(element.currentImage, element.imageLinkProperty);
 
         expect(element.$$('iron-image')).to.exist;
         expect(element.$$('iron-image').src).to.deep.equal(expectedSrc);
-        expect(element.$$('a')).to.not.exist;
+        expect(element.$$('a')).to.exist;
+        expect(element.$$('a').target).to.equal(element.linkTarget);
+        expect(element.$$('a').getAttribute('href')).to.equal(expectedHref);
+        expect(element.$$('a').children[0].localName).to.equal('paper-button');
+        expect(element.$$('a').children[0].textContent).to.equal('Open');
       });
 
-      test('currentImage appears in the DOM with no link below it and has styleClass if specified', function(done) {
-        var expectedSrc = element._getProperty(element.currentImage, element.imageSourceProperty, '');
+      test('currentImage appears in the DOM with styleClass if specified', function(done) {
         element.styleClass = 'some-class';
 
         flush(function() {
           expect(element.styleClass).to.equal('some-class');
           expect(element.$$('iron-image')).to.exist;
           expect(element.$$('iron-image').className.includes(element.styleClass)).to.be.true;
-          expect(element.$$('iron-image').src).to.deep.equal(expectedSrc);
-          expect(element.$$('a')).to.not.exist;
           done();
         });
       });
 
       test('necessary buttons and icons are present', function() {
-        expect(Polymer.dom(element.root).querySelectorAll('paper-button').length).to.equal(3);
+        expect(Polymer.dom(element.root).querySelectorAll('paper-button').length).to.equal(4);
         expect(element.$$('paper-button.exit-button')).to.exist;
         expect(element.$$('paper-button.exit-button').onClick).to.deep.equal(element.closeDialog());
         expect(element.$$('paper-button.exit-button').children.length).to.equal(1);
@@ -144,23 +146,6 @@ limitations under the License.
         expect(element.$$('paper-button.next-button').children.length).to.equal(1);
         expect(element.$$('paper-button.next-button').children[0].localName).to.equal('iron-icon');
         expect(element.$$('paper-button.next-button').children[0].icon).to.equal('image:navigate-next');
-      });
-
-      test('if linkText is defined, link appears below iron-image', function(done) {
-        element.linkText = 'some text';
-        var expectedSrc = element._getProperty(element.currentImage, element.imageSourceProperty, '');
-        var expectedHref = element._getProperty(element.currentImage, element.imageLinkProperty, '#');
-
-        flush(function() {
-          expect(element.$$('iron-image')).to.exist;
-          expect(element.$$('iron-image').src).to.deep.equal(expectedSrc);
-          expect(element.$$('a')).to.exist;
-          expect(element.$$('a').target).to.equal(element.linkTarget);
-          expect(element.$$('a').getAttribute('href')).to.equal(expectedHref);
-          expect(element.$$('a').children[0].localName).to.equal('paper-button');
-          expect(element.$$('a').children[0].textContent).to.equal(element.linkText);
-          done();
-        });
       });
 
       test('_getProperty returns the correct id and source', function() {
@@ -210,17 +195,39 @@ limitations under the License.
         element.closeDialog();
         expect(element.$$('image-gallery-popup')).to.not.exist;
       });
+    });
 
-      test('does not show link if linkText is unset', function() {
-        expect(element.linkText).to.equal('');
-        expect(element.$$('a')).to.not.exist;
+    suite('image-gallery-popup with no link', function() {
+      var element;
+
+      setup(function() {
+        element = fixture('image-gallery-popup-fixture');
       });
 
-      test('does show link if linkText is set', function(done) {
-        element.linkText = 'Open';
+      test('if link in object is not defined, link does not appear below iron-image', function(done) {
+        element.images = [{
+          id: 'id1',
+          source: 'source1'
+        }];
+
         flush(function() {
-          expect(element.linkText).to.equal('Open');
-          expect(element.$$('a')).to.exist;
+          expect(element.$$('iron-image')).to.exist;
+          expect(element.$$('a')).to.not.exist;
+          done();
+        });
+      });
+
+      test('if link property is not defined, link does not appear below iron-image', function(done) {
+        element.imageLinkProperty = 'foobar';
+        element.images = [{
+          id: 'id1',
+          link: 'link1',
+          source: 'source1'
+        }];
+
+        flush(function() {
+          expect(element.$$('iron-image')).to.exist;
+          expect(element.$$('a')).to.not.exist;
           done();
         });
       });
