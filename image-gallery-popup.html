@@ -289,7 +289,7 @@ A Polymer Element showing a full-screen image gallery popup.
        * @private
        */
       _getProperty: function(item, property, defaultValue) {
-        return item[property] || defaultValue;
+        return item ? (item[property] || defaultValue) : undefined;
       },
 
       /**

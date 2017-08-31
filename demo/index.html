@@ -18,29 +18,31 @@ limitations under the License.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="../image-gallery-popup.html">
 </head>
 
 <body unresolved>
-  <template is="dom-bind" id="demo">
-    <p>Images: [{link: http://nextcentury.com, source: NextCentury.png},{link: https://github.com/DigElements/image-gallery-popup, source: dig.png}]</p>
-    <p>Image Link Property: link</p>
-    <p>Image Source Property: source</p>
-    <p>Current Index: 1</p>
-    <p>Link Text: Go To Homepage</p>
-    <p>Link Target: _blank</p>
-    <p>Style Class: custom</p>
+  <dom-bind id="demo">
+    <template is="dom-bind">
+      <p>Images: [{link: http://nextcentury.com, source: NextCentury.png},{link: https://github.com/DigElements/image-gallery-popup, source: dig.png}]</p>
+      <p>Image Link Property: link</p>
+      <p>Image Source Property: source</p>
+      <p>Current Index: 1</p>
+      <p>Link Text: Go To Homepage</p>
+      <p>Link Target: _blank</p>
+      <p>Style Class: custom</p>
 
-    <image-gallery-popup
-      images='[{"link":"http://nextcentury.com","source":"NextCentury.png"},{"link":"https://github.com/DigElements/image-gallery-popup","source":"dig.png"}]'
-      image-link-property='link'
-      image-source-property='source'
-      current-index='1'
-      link-text='Go To Homepage'
-      link-target='_blank'
-      style-class='custom'>
-    </image-gallery-popup>
-  </template>
+      <image-gallery-popup
+        images='[{"link":"http://nextcentury.com","source":"NextCentury.png"},{"link":"https://github.com/DigElements/image-gallery-popup","source":"dig.png"}]'
+        image-link-property='link'
+        image-source-property='source'
+        current-index='1'
+        link-text='Go To Homepage'
+        link-target='_blank'
+        style-class='custom'>
+      </image-gallery-popup>
+    </template>
+  </dom-bind>
 </body>
 </html>
