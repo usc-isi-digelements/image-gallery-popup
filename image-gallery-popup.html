@@ -44,7 +44,7 @@ A Polymer Element showing a full-screen image gallery popup.
       }
 
       .gallery {
-        --paper-dialog-background-color: transparent;
+        background-color: rgba(0,0,0,0.5);
         box-shadow: none;
         display: inline-block;
         margin: 0;
@@ -129,7 +129,7 @@ A Polymer Element showing a full-screen image gallery popup.
       }
     </style>
 
-    <paper-dialog id="imageModal" modal entry-animation="fade-in-animation" exit-animation="fade-out-animation" class="gallery">
+    <paper-dialog id="imageModal" entry-animation="fade-in-animation" exit-animation="fade-out-animation" class="gallery">
       <div class="layout horizontal center layout-override">
         <div class="layout vertical flex">
           <iron-image src="[[_getProperty(currentImage, imageSourceProperty, '')]]" class$="layout horizontal center-justified [[styleClass]]"></iron-image>
